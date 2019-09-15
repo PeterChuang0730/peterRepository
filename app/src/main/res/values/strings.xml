@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">臺北市立動物園</string>
+    <string name="loading_data">資料讀取中，請稍後...</string>
+    <string name="area_picture">館區圖片</string>
+    <string name="plant_picture">植物圖片</string>
+    <string name="plant_data">植物資料</string>
+    <string name="arrow_picture">箭頭圖片</string>
+    <string name="open_url">開啟網頁</string>
+    <string name="goto_area_plant">前往館區的植物介紹</string>
+    <string name="no_data">目前無資料</string>
+    <string name="alias">別名</string>
+    <string name="brief">簡介</string>
+    <string name="feature">確認方式</string>
+    <string name="last_update">最後更新：</string>
+</resources>
