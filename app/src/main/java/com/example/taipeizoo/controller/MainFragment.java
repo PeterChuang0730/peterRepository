@@ -7,14 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taipeizoo.R;
-import com.example.taipeizoo.adapter.CustomAreaAdapter;
+import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
 import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
 import com.example.taipeizoo.view.WaitProgressDialog;
@@ -38,14 +39,16 @@ import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
     private String API_ALL_AREA = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5a0e5fbb-72f8-41c6-908e-2fb25eff9b8a";
     private String API_ALL_PLANT = "\thttps://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14";
     private ArrayList<Area> areaList;
     static ArrayList<Plant> plantList;
 
-    private ListView listView;
-    private CustomAreaAdapter customAreaAdapter;
+    private RecyclerView recyclerView;
+    private AreaRecyclerAdapter adapter;
+    //private ListView listView;
+    //private CustomAreaAdapter customAreaAdapter;
     private Context mContext;
 
     private OkManager manager;
@@ -70,33 +73,12 @@ public class MainFragment extends Fragment {
             getActivity().setTitle(R.string.app_name);
         }
 
-        listView = Objects.requireNonNull(getView()).findViewById(R.id.listview);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView arg0, View arg1, int arg2,
-                                    long arg3) {
-                if (getFragmentManager() != null) {
-                    try {
-                        Fragment plantFragment = new AreaFragment();
-                        Bundle plantBundle = new Bundle();
-                        plantBundle.putSerializable(AREADATA, areaList.get(arg2));
-                        plantFragment.setArguments(plantBundle);
-
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.mainLayout, plantFragment)
-                                .addToBackStack(null)
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .commit();
-                    } catch (Exception ignored) {
-
-                    }
-                }
-            }
-        });
+        recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
 
         if (areaList != null) {
-            customAreaAdapter = new CustomAreaAdapter(mContext, areaList);
-            listView.setAdapter(customAreaAdapter);
+            adapter = new AreaRecyclerAdapter(mContext, areaList, this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+            recyclerView.setAdapter(adapter);
         } else {
             waitProgressDialog(mContext, getString(R.string.loading_data));
 
@@ -117,8 +99,9 @@ public class MainFragment extends Fragment {
                             areaList = gson.fromJson(arrayResults, collectionType);
 
                             if (areaList != null) {
-                                customAreaAdapter = new CustomAreaAdapter(mContext, areaList);
-                                listView.setAdapter(customAreaAdapter);
+                                adapter = new AreaRecyclerAdapter(mContext, areaList, MainFragment.this);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                                recyclerView.setAdapter(adapter);
                             }
                         }
                     }
@@ -159,6 +142,26 @@ public class MainFragment extends Fragment {
                 public void onFailure(Call call, IOException e) {
                 }
             });
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (getFragmentManager() != null) {
+            try {
+                Fragment plantFragment = new AreaFragment();
+                Bundle plantBundle = new Bundle();
+                plantBundle.putSerializable(AREADATA, areaList.get(i));
+                plantFragment.setArguments(plantBundle);
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.mainLayout, plantFragment)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+            } catch (Exception ignored) {
+
+            }
         }
     }
 }
