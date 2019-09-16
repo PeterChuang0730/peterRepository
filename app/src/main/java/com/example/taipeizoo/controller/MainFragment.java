@@ -47,8 +47,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private RecyclerView recyclerView;
     private AreaRecyclerAdapter adapter;
-    //private ListView listView;
-    //private CustomAreaAdapter customAreaAdapter;
     private Context mContext;
 
     private OkManager manager;

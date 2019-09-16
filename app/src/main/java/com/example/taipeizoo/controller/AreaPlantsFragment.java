@@ -26,9 +26,6 @@ import static com.example.taipeizoo.webservice.OkManager.PLANTLIST;
 public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
-    //AreaRecyclerAdapter adapter;
-    //private ListView listView;
-    //private CustomPlantAdapter customPlantAdapter;
     private PlantRecyclerAdapter adapter;
     private Context mContext;
 
