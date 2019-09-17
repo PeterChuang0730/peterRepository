@@ -12,4 +12,6 @@
     <string name="brief">簡介</string>
     <string name="feature">確認方式</string>
     <string name="last_update">最後更新：</string>
+    <string name="reconnect_network_hint">請確認連上網路後再重試</string>
+    <string name="ok">OK</string>
 </resources>

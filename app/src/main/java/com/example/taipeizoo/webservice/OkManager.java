@@ -3,7 +3,10 @@ package com.example.taipeizoo.webservice;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.example.taipeizoo.view.WaitProgressDialog;
+
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,7 +28,12 @@ public class OkManager {
     public static String PLANTDETAIL = "plantDetail";
 
     private OkManager() {
-        client = new OkHttpClient();
+        client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
         handler = new Handler(Looper.getMainLooper());
     }
 
@@ -62,7 +70,19 @@ public class OkManager {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (callback != null) {
+                            try {
+                                WaitProgressDialog.closeDialog();
+                                WaitProgressDialog.noNetwork();
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+                    }
+                });
             }
 
             @Override
@@ -77,7 +97,5 @@ public class OkManager {
 
     public interface CallbackResponse {
         void onResponse(String result);
-
-        void onFailure(Call call, IOException e);
     }
 }

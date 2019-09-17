@@ -26,13 +26,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import okhttp3.Call;
 
 import static com.example.taipeizoo.view.WaitProgressDialog.waitProgressDialog;
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
@@ -104,11 +101,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                         }
                     }
                 }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    WaitProgressDialog.closeDialog();
-                }
             });
         }
 
@@ -134,10 +126,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             plantList = gson.fromJson(arrayResults, collectionType);
                         }
                     }
-                }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
                 }
             });
         }
