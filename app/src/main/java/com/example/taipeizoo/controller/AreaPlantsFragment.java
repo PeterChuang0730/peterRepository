@@ -50,7 +50,11 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
             getActivity().setTitle(R.string.plant_data);
         }
 
+        adapter = new PlantRecyclerAdapter(mContext, this);
+
         recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(adapter);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -59,9 +63,7 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
 
                 if (plantList != null) {
                     if (plantList.size() > 0) {
-                        adapter = new PlantRecyclerAdapter(mContext, plantList, this);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                        recyclerView.setAdapter(adapter);
+                        adapter.refreshData(plantList);
                     }
                 }
             } catch (Exception ignored) {

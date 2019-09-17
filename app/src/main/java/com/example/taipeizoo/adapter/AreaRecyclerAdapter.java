@@ -24,10 +24,8 @@ public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapte
     private ArrayList<Area> areaList;
     private AdapterView.OnItemClickListener onItemClickListener;
 
-    public AreaRecyclerAdapter(Context context, ArrayList<Area> data,
-                               AdapterView.OnItemClickListener onItemClickListener) {
+    public AreaRecyclerAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener) {
         this.mContext = context;
-        this.areaList = data;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -64,9 +62,18 @@ public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapte
         holder.areaMemo.setText(area.getMemo());
     }
 
+    public void refreshData(ArrayList<Area> data) {
+        this.areaList = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return areaList.size();
+        if (areaList == null) {
+            return 0;
+        } else {
+            return areaList.size();
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

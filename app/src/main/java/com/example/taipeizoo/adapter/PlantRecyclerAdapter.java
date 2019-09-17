@@ -24,10 +24,8 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
     private ArrayList<Plant> plantList;
     private AdapterView.OnItemClickListener onItemClickListener;
 
-    public PlantRecyclerAdapter(Context context, ArrayList<Plant> data,
-                                AdapterView.OnItemClickListener onItemClickListener) {
+    public PlantRecyclerAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener) {
         this.mContext = context;
-        this.plantList = data;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -84,9 +82,18 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
         holder.plantAlsoKnown.setText(plant.getAlsoKnown());
     }
 
+    public void refreshData(ArrayList<Plant> data) {
+        this.plantList = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return plantList.size();
+        if (plantList == null) {
+            return 0;
+        } else {
+            return plantList.size();
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

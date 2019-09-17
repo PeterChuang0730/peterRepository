@@ -71,12 +71,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             getActivity().setTitle(R.string.app_name);
         }
 
+        adapter = new AreaRecyclerAdapter(mContext, this);
+
         recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(adapter);
 
         if (areaList != null) {
-            adapter = new AreaRecyclerAdapter(mContext, areaList, this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-            recyclerView.setAdapter(adapter);
+            adapter.refreshData(areaList);
         } else {
             waitProgressDialog(mContext, getString(R.string.loading_data));
 
@@ -97,9 +99,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             areaList = gson.fromJson(arrayResults, collectionType);
 
                             if (areaList != null) {
-                                adapter = new AreaRecyclerAdapter(mContext, areaList, MainFragment.this);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                                recyclerView.setAdapter(adapter);
+                                adapter.refreshData(areaList);
                             }
                         }
                     }
