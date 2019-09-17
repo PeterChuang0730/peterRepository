@@ -53,6 +53,8 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
 
         holder.plantName.setText(plant.getName_Ch());
 
+        Glide.with(mContext).clear(holder.plantImage);
+
         if (plant.getPictureURL() != null) {
             if (plant.getPictureURL().contains("http")) {
                 Glide.with(mContext)

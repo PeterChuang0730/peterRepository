@@ -54,6 +54,8 @@ public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapte
 
         holder.areaName.setText(area.getName());
 
+        Glide.with(mContext).clear(holder.areaImage);
+
         Glide.with(mContext)
                 .load(area.getPictureURL())
                 .into(holder.areaImage);
