@@ -89,6 +89,7 @@ public class OkManager {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response != null && response.isSuccessful()) {
                     onSuccessJsonStringMethod(response.body().string(), callback);
+                    response.close();
                 }
             }
         });
