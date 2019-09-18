@@ -1,5 +1,6 @@
 package com.example.taipeizoo.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -42,9 +43,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     private ArrayList<Area> areaList;
     static ArrayList<Plant> plantList;
 
-    private RecyclerView recyclerView;
     private AreaRecyclerAdapter adapter;
-    private Context mContext;
+    private Activity mActivity;
 
     private OkManager manager;
 
@@ -52,7 +52,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        mContext = context;
+        mActivity = (Activity) context;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,20 +64,20 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getActivity() != null) {
-            getActivity().setTitle(R.string.app_name);
+        if (mActivity != null) {
+            mActivity.setTitle(R.string.app_name);
         }
 
-        adapter = new AreaRecyclerAdapter(mContext, this);
+        adapter = new AreaRecyclerAdapter(mActivity, this);
 
-        recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 
         if (areaList != null) {
             adapter.refreshData(areaList);
         } else {
-            waitProgressDialog(mContext, getString(R.string.loading_data));
+            waitProgressDialog(mActivity, getString(R.string.loading_data));
 
             manager.asyncJsonStringByURL(API_ALL_AREA, new OkManager.CallbackResponse() {
                 @Override

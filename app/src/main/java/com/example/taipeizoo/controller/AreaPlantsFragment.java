@@ -1,5 +1,6 @@
 package com.example.taipeizoo.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,9 +26,7 @@ import static com.example.taipeizoo.webservice.OkManager.PLANTLIST;
 
 public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private RecyclerView recyclerView;
-    private PlantRecyclerAdapter adapter;
-    private Context mContext;
+    private Activity mActivity;
 
     private ArrayList<Plant> plantList = new ArrayList<>();
 
@@ -35,7 +34,7 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        mContext = context;
+        mActivity = (Activity) context;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,14 +45,14 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getActivity() != null) {
-            getActivity().setTitle(R.string.plant_data);
+        if (mActivity != null) {
+            mActivity.setTitle(R.string.plant_data);
         }
 
-        adapter = new PlantRecyclerAdapter(mContext, this);
+        PlantRecyclerAdapter adapter = new PlantRecyclerAdapter(mActivity, this);
 
-        recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 
         Bundle bundle = getArguments();

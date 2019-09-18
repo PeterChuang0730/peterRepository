@@ -1,5 +1,6 @@
 package com.example.taipeizoo.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,7 +33,7 @@ public class AreaFragment extends Fragment {
 
     private Area selectedArea;
 
-    private Context mContext;
+    private Activity mActivity;
 
     private ArrayList<Plant> selectedPlantList = new ArrayList<>();
 
@@ -40,7 +41,7 @@ public class AreaFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        mContext = context;
+        mActivity = (Activity) context;
     }
 
     @Override
@@ -71,15 +72,15 @@ public class AreaFragment extends Fragment {
                 selectedArea = (Area) bundle.getSerializable(AREADATA);
 
                 if (selectedArea != null) {
-                    if (getActivity() != null) {
-                        getActivity().setTitle(selectedArea.getName());
+                    if (mActivity != null) {
+                        mActivity.setTitle(selectedArea.getName());
                     }
 
                     areaName.setText(selectedArea.getInfo());
                     areaMemo.setText(selectedArea.getMemo());
                     areaCategory.setText(selectedArea.getCategory());
 
-                    Glide.with(mContext)
+                    Glide.with(mActivity)
                             .load(selectedArea.getPictureURL())
                             .into(areaImage);
 
@@ -115,7 +116,7 @@ public class AreaFragment extends Fragment {
                                                     .commit();
                                         }
                                     } else {
-                                        Toast.makeText(mContext, getString(R.string.no_data),
+                                        Toast.makeText(mActivity, getString(R.string.no_data),
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }

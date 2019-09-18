@@ -1,5 +1,6 @@
 package com.example.taipeizoo.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,13 +21,13 @@ import java.util.Objects;
 import static com.example.taipeizoo.webservice.OkManager.PLANTDETAIL;
 
 public class PlantDetailFragment extends Fragment {
-    private Context mContext;
+    private Activity mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        mContext = context;
+        mActivity = (Activity) context;
     }
 
     @Override
@@ -57,8 +58,8 @@ public class PlantDetailFragment extends Fragment {
                 Plant selectedPlant = (Plant) bundle.getSerializable(PLANTDETAIL);
 
                 if (selectedPlant != null) {
-                    if (getActivity() != null) {
-                        getActivity().setTitle(selectedPlant.getName_Ch());
+                    if (mActivity != null) {
+                        mActivity.setTitle(selectedPlant.getName_Ch());
                     }
 
                     plantChName.setText(selectedPlant.getName_Ch());
@@ -69,25 +70,25 @@ public class PlantDetailFragment extends Fragment {
 
                     if (selectedPlant.getPictureURL() != null) {
                         if (selectedPlant.getPictureURL().contains("http")) {
-                            Glide.with(mContext)
+                            Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getAlsoKnown() != null) {
                         if (selectedPlant.getAlsoKnown().contains("http")) {
-                            Glide.with(mContext)
+                            Glide.with(mActivity)
                                     .load(selectedPlant.getAlsoKnown())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getPictureURL2() != null) {
                         if (selectedPlant.getPictureURL2().contains("http")) {
-                            Glide.with(mContext)
+                            Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL2())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getPictureURL3() != null) {
                         if (selectedPlant.getPictureURL3().contains("http")) {
-                            Glide.with(mContext)
+                            Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL3())
                                     .into(plantImage);
                         }
