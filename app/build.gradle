@@ -32,9 +32,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.2.0'
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
-    //
-    implementation 'com.android.support:appcompat-v7:29.4.0'
-    implementation 'com.android.support:support-v4:29.4.0'
-    implementation 'com.android.support:design:29.4.0'
+    // RecyclerView
+    implementation 'com.android.support:recyclerview-v7:29.0.0'
 
 }
