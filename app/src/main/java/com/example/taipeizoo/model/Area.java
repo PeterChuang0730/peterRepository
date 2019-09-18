@@ -2,6 +2,7 @@ package com.example.taipeizoo.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Area implements Serializable {
     private String E_Pic_URL;
     //private String E_Geo;

@@ -5,7 +5,10 @@ import android.os.Looper;
 
 import com.example.taipeizoo.view.WaitProgressDialog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -69,7 +72,7 @@ public class OkManager {
         final Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -86,10 +89,14 @@ public class OkManager {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response != null && response.isSuccessful()) {
-                    onSuccessJsonStringMethod(response.body().string(), callback);
-                    response.close();
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (response.isSuccessful()) {
+                    try {
+                        onSuccessJsonStringMethod(Objects.requireNonNull(response.body()).string(), callback);
+                        response.close();
+                    } catch (Exception ignored) {
+
+                    }
                 }
             }
         });

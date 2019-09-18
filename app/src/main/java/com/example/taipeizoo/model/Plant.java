@@ -2,6 +2,7 @@ package com.example.taipeizoo.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Plant implements Serializable {
     private String F_Location;
     private String F_Pic01_URL;

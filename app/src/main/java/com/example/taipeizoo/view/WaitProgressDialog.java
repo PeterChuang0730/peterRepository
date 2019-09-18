@@ -11,8 +11,8 @@ import com.example.taipeizoo.R;
 public class WaitProgressDialog {
     private volatile static ProgressDialog mWaitProgressDialog;
     @SuppressLint("StaticFieldLeak")
-    static Context ctx;
-    static boolean isAlert;
+    private static Context ctx;
+    private static boolean isAlert;
 
     public static ProgressDialog waitProgressDialog(Context mContext, String msg) {
         ctx = mContext;
