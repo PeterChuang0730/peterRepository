@@ -69,6 +69,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         adapter = new AreaRecyclerAdapter(mActivity, this);
 
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        // 設定LayoutManager為LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 

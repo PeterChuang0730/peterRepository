@@ -21,7 +21,6 @@ public class OkManager {
     private OkHttpClient client;
     private volatile static OkManager manager;
     private static OkManager instance = null;
-    //private final String TAG = OkManager.class.getSimpleName();
     private Handler handler;
 
     public static String API_ALL_AREA = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5a0e5fbb-72f8-41c6-908e-2fb25eff9b8a";
