@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taipeizoo.R;
+import com.example.taipeizoo.Utility.Util;
 import com.example.taipeizoo.adapter.PlantRecyclerAdapter;
 import com.example.taipeizoo.model.Plant;
 
@@ -58,7 +59,7 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
         Bundle bundle = getArguments();
         if (bundle != null) {
             try {
-                plantList = (ArrayList<Plant>) bundle.getSerializable(PLANTLIST);
+                plantList = Util.cast(bundle.getSerializable(PLANTLIST));
 
                 if (plantList != null) {
                     if (plantList.size() > 0) {
