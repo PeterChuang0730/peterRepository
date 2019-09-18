@@ -38,8 +38,6 @@ import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private String API_ALL_AREA = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5a0e5fbb-72f8-41c6-908e-2fb25eff9b8a";
-    private String API_ALL_PLANT = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14";
     private ArrayList<Area> areaList;
     static ArrayList<Plant> plantList;
 
@@ -79,7 +77,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         } else {
             waitProgressDialog(mActivity, getString(R.string.loading_data));
 
-            manager.asyncJsonStringByURL(API_ALL_AREA, new OkManager.CallbackResponse() {
+            manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, new OkManager.CallbackResponse() {
                 @Override
                 public void onResponse(String result) {
                     WaitProgressDialog.closeDialog();
@@ -111,7 +109,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         super.onResume();
 
         if (plantList == null) {
-            manager.asyncJsonStringByURL(API_ALL_PLANT, new OkManager.CallbackResponse() {
+            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
                 @Override
                 public void onResponse(String result) {
                     if (!TextUtils.equals(result, "")) {

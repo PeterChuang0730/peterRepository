@@ -24,6 +24,9 @@ public class OkManager {
     //private final String TAG = OkManager.class.getSimpleName();
     private Handler handler;
 
+    public static String API_ALL_AREA = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5a0e5fbb-72f8-41c6-908e-2fb25eff9b8a";
+    public static String API_ALL_PLANT = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14";
+
     public static String RESULT = "result";
     public static String RESULTS = "results";
     public static String AREADATA = "areaData";
