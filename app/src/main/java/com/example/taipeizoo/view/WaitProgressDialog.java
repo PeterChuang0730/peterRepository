@@ -8,31 +8,38 @@ import android.content.DialogInterface;
 
 import com.example.taipeizoo.R;
 
+import java.lang.ref.WeakReference;
+
 public class WaitProgressDialog {
-    private volatile static ProgressDialog mWaitProgressDialog;
+    private static WeakReference<ProgressDialog> progressDialogRef;
+
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
     private static boolean isAlert;
 
-    public static ProgressDialog waitProgressDialog(Context mContext, String msg) {
-        ctx = mContext;
+    public static void showProgressDialog(Context mContext, String msg) {
         isAlert = false;
-        if (mWaitProgressDialog == null) {
-            synchronized (WaitProgressDialog.class) {
-                if (mWaitProgressDialog == null) {
-                    mWaitProgressDialog = ProgressDialog.show(mContext, "", msg, true);
-                    mWaitProgressDialog.setCancelable(false);
-                    mWaitProgressDialog.setCanceledOnTouchOutside(false);
-                }
-            }
+        ctx = mContext;
+
+        if (progressDialogRef == null) {
+            progressDialogRef = new WeakReference<>(new ProgressDialog(mContext));
         }
-        return mWaitProgressDialog;
+
+        if (!progressDialogRef.get().isShowing()) {
+            progressDialogRef = new WeakReference<>(new ProgressDialog(mContext));
+            progressDialogRef.get().setMessage(msg);
+            progressDialogRef.get().show();
+        }
     }
 
     public static void closeDialog() {
-        if (mWaitProgressDialog != null) {
-            mWaitProgressDialog.dismiss();
-            mWaitProgressDialog = null;
+        try {
+            if (progressDialogRef != null) {
+                progressDialogRef.get().dismiss();
+                progressDialogRef = null;
+            }
+        } catch (Exception ignored) {
+            progressDialogRef = null;
         }
     }
 

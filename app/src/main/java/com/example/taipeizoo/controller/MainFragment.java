@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.taipeizoo.view.WaitProgressDialog.waitProgressDialog;
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
@@ -76,7 +75,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         if (areaList != null) {
             adapter.refreshData(areaList);
         } else {
-            waitProgressDialog(mActivity, getString(R.string.loading_data));
+            WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
 
             manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, new OkManager.CallbackResponse() {
                 @Override
