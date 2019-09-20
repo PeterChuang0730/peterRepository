@@ -1,6 +1,5 @@
 package com.example.taipeizoo.view;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,14 +11,19 @@ import java.lang.ref.WeakReference;
 
 public class WaitProgressDialog {
     private static WeakReference<ProgressDialog> progressDialogRef;
+    private static WeakReference<Context> contextRef;
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context ctx;
+    private static AlertDialog.Builder builder;
+
     private static boolean isAlert;
 
     public static void showProgressDialog(Context mContext, String msg) {
         isAlert = false;
-        ctx = mContext;
+        contextRef = new WeakReference<>(mContext);
+
+        if (contextRef.get() != null) {
+            builder = new AlertDialog.Builder(contextRef.get());
+        }
 
         if (progressDialogRef == null) {
             progressDialogRef = new WeakReference<>(new ProgressDialog(mContext));
@@ -47,10 +51,10 @@ public class WaitProgressDialog {
         try {
             if (!isAlert) {
                 isAlert = true;
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage(ctx.getString(R.string.reconnect_network_hint))
+
+                builder.setMessage(contextRef.get().getString(R.string.reconnect_network_hint))
                         .setCancelable(false)
-                        .setPositiveButton(ctx.getString(R.string.ok),
+                        .setPositiveButton(contextRef.get().getString(R.string.ok),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                     }
