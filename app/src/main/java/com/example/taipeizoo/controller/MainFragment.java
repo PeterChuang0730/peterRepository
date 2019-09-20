@@ -128,23 +128,25 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         super.onResume();
 
         if (plantList == null) {
-            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
-                @Override
-                public void onResponse(String result) {
-                    if (!TextUtils.equals(result, "")) {
-                        JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
-                        JsonObject jsonResult = jo.getAsJsonObject(RESULT);
-                        JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
+            if (manager != null) {
+                manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
+                    @Override
+                    public void onResponse(String result) {
+                        if (!TextUtils.equals(result, "")) {
+                            JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
+                            JsonObject jsonResult = jo.getAsJsonObject(RESULT);
+                            JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
 
-                        if (arrayResults != null) {
-                            Gson gson = new Gson();
-                            Type collectionType = new TypeToken<List<Plant>>() {
-                            }.getType();
-                            plantList = gson.fromJson(arrayResults, collectionType);
+                            if (arrayResults != null) {
+                                Gson gson = new Gson();
+                                Type collectionType = new TypeToken<List<Plant>>() {
+                                }.getType();
+                                plantList = gson.fromJson(arrayResults, collectionType);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
