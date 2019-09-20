@@ -96,6 +96,11 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView plantName;
         ImageView plantImage;

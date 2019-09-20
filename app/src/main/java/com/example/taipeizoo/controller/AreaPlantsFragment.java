@@ -51,6 +51,7 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
         }
 
         PlantRecyclerAdapter adapter = new PlantRecyclerAdapter(mActivity, this);
+        adapter.setHasStableIds(true);
 
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));

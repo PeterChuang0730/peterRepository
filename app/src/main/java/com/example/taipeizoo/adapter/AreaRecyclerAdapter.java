@@ -76,6 +76,11 @@ public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapte
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView areaName;
         ImageView areaImage;

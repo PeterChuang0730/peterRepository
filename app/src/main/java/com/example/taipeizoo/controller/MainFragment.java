@@ -69,6 +69,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         }
 
         adapter = new AreaRecyclerAdapter(mActivity, this);
+        adapter.setHasStableIds(true);
 
         RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
         // 設定LayoutManager為LinearLayout
@@ -82,7 +83,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                getJsonData();
+                getAreaJsonData();
+                getPlantJsonData();
             }
         });
 
@@ -90,12 +92,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             adapter.refreshData(areaList);
         } else {
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
-            getJsonData();
+            getAreaJsonData();
         }
 
     }
 
-    private void getJsonData() {
+    private void getAreaJsonData() {
         if (manager != null) {
             manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, new OkManager.CallbackResponse() {
                 @Override
@@ -123,30 +125,34 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         }
     }
 
+    private void getPlantJsonData() {
+        if (manager != null) {
+            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
+                @Override
+                public void onResponse(String result) {
+                    if (!TextUtils.equals(result, "")) {
+                        JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
+                        JsonObject jsonResult = jo.getAsJsonObject(RESULT);
+                        JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
+
+                        if (arrayResults != null) {
+                            Gson gson = new Gson();
+                            Type collectionType = new TypeToken<List<Plant>>() {
+                            }.getType();
+                            plantList = gson.fromJson(arrayResults, collectionType);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
         if (plantList == null) {
-            if (manager != null) {
-                manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
-                    @Override
-                    public void onResponse(String result) {
-                        if (!TextUtils.equals(result, "")) {
-                            JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
-                            JsonObject jsonResult = jo.getAsJsonObject(RESULT);
-                            JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
-
-                            if (arrayResults != null) {
-                                Gson gson = new Gson();
-                                Type collectionType = new TypeToken<List<Plant>>() {
-                                }.getType();
-                                plantList = gson.fromJson(arrayResults, collectionType);
-                            }
-                        }
-                    }
-                });
-            }
+            getPlantJsonData();
         }
     }
 
