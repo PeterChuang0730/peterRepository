@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
@@ -41,6 +42,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     static ArrayList<Plant> plantList;
 
     private AreaRecyclerAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private Activity mActivity;
 
     private OkManager manager;
@@ -72,11 +75,28 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 
+        swipeRefreshLayout = Objects.requireNonNull(getView()).findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setRefreshing(false);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                getJsonData();
+            }
+        });
+
         if (areaList != null) {
             adapter.refreshData(areaList);
         } else {
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
+            getJsonData();
+        }
 
+    }
+
+    private void getJsonData() {
+        if (manager != null) {
             manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, new OkManager.CallbackResponse() {
                 @Override
                 public void onResponse(String result) {
@@ -101,7 +121,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                 }
             });
         }
-
     }
 
     @Override
