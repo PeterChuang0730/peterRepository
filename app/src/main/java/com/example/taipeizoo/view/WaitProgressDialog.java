@@ -52,15 +52,17 @@ public class WaitProgressDialog {
             if (!isAlert) {
                 isAlert = true;
 
-                builder.setMessage(contextRef.get().getString(R.string.reconnect_network_hint))
-                        .setCancelable(false)
-                        .setPositiveButton(contextRef.get().getString(R.string.ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                if (contextRef.get() != null) {
+                    builder.setMessage(contextRef.get().getString(R.string.reconnect_network_hint))
+                            .setCancelable(false)
+                            .setPositiveButton(contextRef.get().getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
         } catch (Exception ignored) {
 
