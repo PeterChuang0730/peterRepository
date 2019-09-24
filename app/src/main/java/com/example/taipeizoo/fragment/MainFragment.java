@@ -94,7 +94,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         });
 
         if (controller.getData() != null) {
-            adapter.refreshData(controller.getData());
+            adapter.refreshData(controller);
         } else {
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
             getAreaJsonData();
@@ -184,7 +184,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     public void refreshRecyclerView() {
         if (controller.getData() != null) {
-            adapter.refreshData(controller.getData());
+            adapter.refreshData(controller);
         }
     }
 }

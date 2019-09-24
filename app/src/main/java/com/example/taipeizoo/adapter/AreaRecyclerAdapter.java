@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.taipeizoo.R;
+import com.example.taipeizoo.controller.AreaInfoController;
 import com.example.taipeizoo.model.Area;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
 public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<Area> areaList;
+    //private ArrayList<Area> areaList;
+    private AreaInfoController controller;
     private AdapterView.OnItemClickListener onItemClickListener;
 
     public AreaRecyclerAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener) {
@@ -47,32 +47,36 @@ public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Area area = areaList.get(position);
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
+        if (controller != null) {
+            if (controller.getData() != null) {
+                Area area = controller.getData().get(position);
 
-        holder.areaName.setText(area.getName());
+                holder.areaName.setText(area.getName());
 
-        Glide.with(mContext).clear(holder.areaImage);
+                Glide.with(mContext).clear(holder.areaImage);
 
-        Glide.with(mContext)
-                .load(area.getPictureURL())
-                .into(holder.areaImage);
+                Glide.with(mContext)
+                        .load(area.getPictureURL())
+                        .into(holder.areaImage);
 
-        holder.areaInfo.setText(area.getInfo());
-        holder.areaMemo.setText(area.getMemo());
+                holder.areaInfo.setText(area.getInfo());
+                holder.areaMemo.setText(area.getMemo());
+            }
+        }
     }
 
-    public void refreshData(ArrayList<Area> data) {
-        this.areaList = data;
+    public void refreshData(AreaInfoController controller) {
+        this.controller = controller;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (areaList == null) {
+        if (controller == null) {
             return 0;
         } else {
-            return areaList.size();
+            return controller.getData().size();
         }
     }
 
