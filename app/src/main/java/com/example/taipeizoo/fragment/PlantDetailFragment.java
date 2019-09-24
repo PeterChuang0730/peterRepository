@@ -18,6 +18,7 @@ import com.example.taipeizoo.model.Plant;
 
 import java.util.Objects;
 
+import static com.example.taipeizoo.Utility.Util.isHttpOrHttpsUrl;
 import static com.example.taipeizoo.webservice.OkManager.PLANTDETAIL;
 
 public class PlantDetailFragment extends Fragment {
@@ -108,10 +109,5 @@ public class PlantDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    private boolean isHttpOrHttpsUrl(String url) {
-        String patter = "^(http|https)://.*$";
-        return url.matches(patter);
     }
 }

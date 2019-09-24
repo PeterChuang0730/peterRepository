@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import static com.example.taipeizoo.Utility.Util.isHttpOrHttpsUrl;
+
 public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdapter.ViewHolder> {
 
     private Context mContext;
@@ -54,25 +56,25 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
         Glide.with(mContext).clear(holder.plantImage);
 
         if (plant.getPictureURL() != null) {
-            if (plant.getPictureURL().contains("http")) {
+            if (isHttpOrHttpsUrl(plant.getPictureURL())) {
                 Glide.with(mContext)
                         .load(plant.getPictureURL())
                         .into(holder.plantImage);
             }
         } else if (plant.getAlsoKnown() != null) {
-            if (plant.getAlsoKnown().contains("http")) {
+            if (isHttpOrHttpsUrl(plant.getAlsoKnown())) {
                 Glide.with(mContext)
                         .load(plant.getAlsoKnown())
                         .into(holder.plantImage);
             }
         } else if (plant.getPictureURL2() != null) {
-            if (plant.getPictureURL2().contains("http")) {
+            if (isHttpOrHttpsUrl(plant.getPictureURL2())) {
                 Glide.with(mContext)
                         .load(plant.getPictureURL2())
                         .into(holder.plantImage);
             }
         } else if (plant.getPictureURL3() != null) {
-            if (plant.getPictureURL3().contains("http")) {
+            if (isHttpOrHttpsUrl(plant.getPictureURL3())) {
                 Glide.with(mContext)
                         .load(plant.getPictureURL3())
                         .into(holder.plantImage);
