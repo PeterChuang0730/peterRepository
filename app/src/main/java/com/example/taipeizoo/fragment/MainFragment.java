@@ -39,7 +39,6 @@ import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private ArrayList<Area> areaList;
     static ArrayList<Plant> plantList;
 
     private AreaRecyclerAdapter adapter;
@@ -60,6 +59,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         manager = OkManager.getInstance();
+
+        controller = new AreaInfoController(MainFragment.this);
+
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -91,8 +93,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         });
 
-        if (areaList != null) {
-            adapter.refreshData(areaList);
+        if (controller.getData() != null) {
+            adapter.refreshData(controller.getData());
         } else {
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
             getAreaJsonData();
@@ -116,10 +118,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             Gson gson = new Gson();
                             Type collectionType = new TypeToken<List<Area>>() {
                             }.getType();
-                            areaList = gson.fromJson(arrayResults, collectionType);
+                            ArrayList<Area> areaList = gson.fromJson(arrayResults, collectionType);
 
-                            if (controller == null) {
-                                controller = new AreaInfoController(areaList, MainFragment.this);
+                            if (areaList == null) {
+                                controller.setData(areaList);
                             }
 
                             controller.updateView();
@@ -167,7 +169,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             try {
                 Fragment plantFragment = new AreaFragment();
                 Bundle plantBundle = new Bundle();
-                plantBundle.putSerializable(AREADATA, areaList.get(i));
+                plantBundle.putSerializable(AREADATA, controller.getData().get(i));
                 plantFragment.setArguments(plantBundle);
 
                 getFragmentManager().beginTransaction()

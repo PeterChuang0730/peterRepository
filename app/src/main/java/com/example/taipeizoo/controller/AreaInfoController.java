@@ -9,9 +9,12 @@ public class AreaInfoController {
     private ArrayList<Area> model;
     private MainFragment view;
 
-    public AreaInfoController(ArrayList<Area> model, MainFragment view) {
-        this.model = model;
+    public AreaInfoController(MainFragment view) {
         this.view = view;
+    }
+
+    public void setData(ArrayList<Area> model) {
+        this.model = model;
     }
 
     public ArrayList<Area> getData() {
