@@ -120,11 +120,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             }.getType();
                             ArrayList<Area> areaList = gson.fromJson(arrayResults, collectionType);
 
-                            if (areaList == null) {
+                            if (areaList != null) {
                                 controller.setData(areaList);
+                                controller.updateView();
                             }
-
-                            controller.updateView();
                         }
                     }
                 }
