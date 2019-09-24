@@ -1,4 +1,4 @@
-package com.example.taipeizoo.controller;
+package com.example.taipeizoo.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
+import com.example.taipeizoo.controller.AreaInfoController;
 import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
 import com.example.taipeizoo.view.WaitProgressDialog;
@@ -47,6 +48,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     private Activity mActivity;
 
     private OkManager manager;
+
+    private AreaInfoController controller;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -114,10 +117,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             Type collectionType = new TypeToken<List<Area>>() {
                             }.getType();
                             areaList = gson.fromJson(arrayResults, collectionType);
+                            controller = new AreaInfoController(areaList, MainFragment.this);
 
-                            if (areaList != null) {
-                                adapter.refreshData(areaList);
-                            }
+                            controller.updateView();
                         }
                     }
                 }
@@ -173,6 +175,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             } catch (Exception ignored) {
 
             }
+        }
+    }
+
+    public void refreshRecyclerView() {
+        if (controller.getData() != null) {
+            adapter.refreshData(controller.getData());
         }
     }
 }

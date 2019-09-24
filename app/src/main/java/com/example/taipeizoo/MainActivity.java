@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.taipeizoo.controller.MainFragment;
+import com.example.taipeizoo.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.taipeizoo.controller;
+package com.example.taipeizoo.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,7 +25,7 @@ import com.example.taipeizoo.model.Plant;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.example.taipeizoo.controller.MainFragment.plantList;
+import static com.example.taipeizoo.fragment.MainFragment.plantList;
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.PLANTLIST;
 
