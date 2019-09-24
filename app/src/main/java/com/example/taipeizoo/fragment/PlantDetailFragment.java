@@ -69,25 +69,25 @@ public class PlantDetailFragment extends Fragment {
                     plantLastUpdate.setText(selectedPlant.getUpdate());
 
                     if (selectedPlant.getPictureURL() != null) {
-                        if (selectedPlant.getPictureURL().contains("http")) {
+                        if (isHttpOrHttpsUrl(selectedPlant.getPictureURL())) {
                             Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getAlsoKnown() != null) {
-                        if (selectedPlant.getAlsoKnown().contains("http")) {
+                        if (isHttpOrHttpsUrl(selectedPlant.getAlsoKnown())) {
                             Glide.with(mActivity)
                                     .load(selectedPlant.getAlsoKnown())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getPictureURL2() != null) {
-                        if (selectedPlant.getPictureURL2().contains("http")) {
+                        if (isHttpOrHttpsUrl(selectedPlant.getPictureURL2())) {
                             Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL2())
                                     .into(plantImage);
                         }
                     } else if (selectedPlant.getPictureURL3() != null) {
-                        if (selectedPlant.getPictureURL3().contains("http")) {
+                        if (isHttpOrHttpsUrl(selectedPlant.getPictureURL3())) {
                             Glide.with(mActivity)
                                     .load(selectedPlant.getPictureURL3())
                                     .into(plantImage);
@@ -108,5 +108,10 @@ public class PlantDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    private boolean isHttpOrHttpsUrl(String url) {
+        String patter = "^(http|https)://.*$";
+        return url.matches(patter);
     }
 }

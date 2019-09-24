@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class AreaRecyclerAdapter extends RecyclerView.Adapter<AreaRecyclerAdapter.ViewHolder> {
 
     private Context mContext;
-    //private ArrayList<Area> areaList;
+
     private AreaInfoController controller;
     private AdapterView.OnItemClickListener onItemClickListener;
 
