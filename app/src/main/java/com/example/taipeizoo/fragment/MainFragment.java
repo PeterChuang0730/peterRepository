@@ -117,7 +117,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                             Type collectionType = new TypeToken<List<Area>>() {
                             }.getType();
                             areaList = gson.fromJson(arrayResults, collectionType);
-                            controller = new AreaInfoController(areaList, MainFragment.this);
+
+                            if (controller == null) {
+                                controller = new AreaInfoController(areaList, MainFragment.this);
+                            }
 
                             controller.updateView();
                         }
