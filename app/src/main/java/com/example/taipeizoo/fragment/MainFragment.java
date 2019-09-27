@@ -60,7 +60,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         manager = OkManager.getInstance();
 
-        controller = new AreaInfoController(MainFragment.this);
+        if (controller == null) {
+            controller = new AreaInfoController(MainFragment.this);
+        }
 
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
