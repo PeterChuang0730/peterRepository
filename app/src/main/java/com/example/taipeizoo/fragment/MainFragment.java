@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,8 +27,9 @@ import com.example.taipeizoo.webservice.OkManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,7 +58,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         mActivity = (Activity) context;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         manager = OkManager.getInstance();
 
         if (controller == null) {
@@ -67,8 +69,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         if (mActivity != null) {
             mActivity.setTitle(R.string.app_name);
@@ -85,13 +87,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         swipeRefreshLayout = requireView().findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setRefreshing(false);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
-                getAreaJsonData();
-                getPlantJsonData();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            getAreaJsonData();
+            getPlantJsonData();
         });
 
         if (controller.getData() != null) {
@@ -100,31 +99,28 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
             getAreaJsonData();
         }
-
     }
+
 
     private void getAreaJsonData() {
         if (manager != null) {
-            manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, new OkManager.CallbackResponse() {
-                @Override
-                public void onResponse(String result) {
-                    WaitProgressDialog.closeDialog();
+            manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, result -> {
+                WaitProgressDialog.closeDialog();
 
-                    if (!TextUtils.equals(result, "")) {
-                        JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
-                        JsonObject jsonResult = jo.getAsJsonObject(RESULT);
-                        JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
+                if (!TextUtils.equals(result, "")) {
+                    Gson gson = new Gson();
+                    JsonObject jo = gson.fromJson(result, JsonObject.class);
+                    JsonObject jsonResult = jo.getAsJsonObject(RESULT);
+                    JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
 
-                        if (arrayResults != null) {
-                            Gson gson = new Gson();
-                            Type collectionType = new TypeToken<List<Area>>() {
-                            }.getType();
-                            ArrayList<Area> areaList = gson.fromJson(arrayResults, collectionType);
+                    if (arrayResults != null) {
+                        Type collectionType = new TypeToken<List<Area>>() {
+                        }.getType();
+                        ArrayList<Area> areaList = gson.fromJson(arrayResults, collectionType);
 
-                            if (areaList != null) {
-                                controller.setData(areaList);
-                                controller.updateView();
-                            }
+                        if (areaList != null) {
+                            controller.setData(areaList);
+                            controller.updateView();
                         }
                     }
                 }
@@ -134,20 +130,17 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private void getPlantJsonData() {
         if (manager != null) {
-            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, new OkManager.CallbackResponse() {
-                @Override
-                public void onResponse(String result) {
-                    if (!TextUtils.equals(result, "")) {
-                        JsonObject jo = new JsonParser().parse(result).getAsJsonObject();
-                        JsonObject jsonResult = jo.getAsJsonObject(RESULT);
-                        JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
+            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, result -> {
+                if (!TextUtils.equals(result, "")) {
+                    Gson gson = new Gson();
+                    JsonObject jo = gson.fromJson(result, JsonObject.class);
+                    JsonObject jsonResult = jo.getAsJsonObject(RESULT);
+                    JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
 
-                        if (arrayResults != null) {
-                            Gson gson = new Gson();
-                            Type collectionType = new TypeToken<List<Plant>>() {
-                            }.getType();
-                            plantList = gson.fromJson(arrayResults, collectionType);
-                        }
+                    if (arrayResults != null) {
+                        Type collectionType = new TypeToken<List<Plant>>() {
+                        }.getType();
+                        plantList = gson.fromJson(arrayResults, collectionType);
                     }
                 }
             });
@@ -165,14 +158,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if (getFragmentManager() != null) {
+        if (getActivity() != null) {
             try {
                 Fragment plantFragment = new AreaFragment();
                 Bundle plantBundle = new Bundle();
                 plantBundle.putSerializable(AREADATA, controller.getData().get(i));
                 plantFragment.setArguments(plantBundle);
 
-                getFragmentManager().beginTransaction()
+                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.mainLayout, plantFragment)
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

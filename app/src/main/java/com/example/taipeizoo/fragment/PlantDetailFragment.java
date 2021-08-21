@@ -10,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.model.Plant;
+
+import org.jetbrains.annotations.NotNull;
 
 import static com.example.taipeizoo.Utility.Util.isHttpOrHttpsUrl;
 import static com.example.taipeizoo.webservice.OkManager.PLANTDETAIL;
@@ -40,8 +43,8 @@ public class PlantDetailFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         try {
             ImageView plantImage = requireView().findViewById(R.id.plantImage);

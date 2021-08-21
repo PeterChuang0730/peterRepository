@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import com.example.taipeizoo.R;
 import com.example.taipeizoo.Utility.Util;
 import com.example.taipeizoo.adapter.PlantRecyclerAdapter;
 import com.example.taipeizoo.model.Plant;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -42,8 +45,8 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         if (mActivity != null) {
             mActivity.setTitle(R.string.plant_data);
@@ -70,7 +73,6 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
 
             }
         }
-
     }
 
     @Override
@@ -80,14 +82,14 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if (getFragmentManager() != null) {
+        if (getActivity() != null) {
             try {
                 Fragment plantDetailFragment = new PlantDetailFragment();
                 Bundle plantBundle = new Bundle();
                 plantBundle.putSerializable(PLANTDETAIL, plantList.get(i));
                 plantDetailFragment.setArguments(plantBundle);
 
-                getFragmentManager().beginTransaction()
+                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.mainLayout, plantDetailFragment)
                         .addToBackStack(null)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
