@@ -20,7 +20,6 @@ import com.example.taipeizoo.adapter.PlantRecyclerAdapter;
 import com.example.taipeizoo.model.Plant;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static com.example.taipeizoo.webservice.OkManager.PLANTDETAIL;
 import static com.example.taipeizoo.webservice.OkManager.PLANTLIST;
@@ -53,7 +52,7 @@ public class AreaPlantsFragment extends Fragment implements AdapterView.OnItemCl
         PlantRecyclerAdapter adapter = new PlantRecyclerAdapter(mActivity, this);
         adapter.setHasStableIds(true);
 
-        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = requireView().findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 

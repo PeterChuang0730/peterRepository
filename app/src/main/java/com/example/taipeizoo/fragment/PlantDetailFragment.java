@@ -16,8 +16,6 @@ import com.bumptech.glide.Glide;
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.model.Plant;
 
-import java.util.Objects;
-
 import static com.example.taipeizoo.Utility.Util.isHttpOrHttpsUrl;
 import static com.example.taipeizoo.webservice.OkManager.PLANTDETAIL;
 
@@ -46,13 +44,13 @@ public class PlantDetailFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         try {
-            ImageView plantImage = Objects.requireNonNull(getView()).findViewById(R.id.plantImage);
+            ImageView plantImage = requireView().findViewById(R.id.plantImage);
 
-            TextView plantChName = Objects.requireNonNull(getView()).findViewById(R.id.plantChName);
-            TextView plantEnName = Objects.requireNonNull(getView()).findViewById(R.id.plantEnName);
-            TextView plantAlias = Objects.requireNonNull(getView()).findViewById(R.id.plantAlias);
-            TextView plantFeature = Objects.requireNonNull(getView()).findViewById(R.id.plantFeature);
-            TextView plantLastUpdate = Objects.requireNonNull(getView()).findViewById(R.id.plantLastUpdate);
+            TextView plantChName = requireView().findViewById(R.id.plantChName);
+            TextView plantEnName = requireView().findViewById(R.id.plantEnName);
+            TextView plantAlias = requireView().findViewById(R.id.plantAlias);
+            TextView plantFeature = requireView().findViewById(R.id.plantFeature);
+            TextView plantLastUpdate = requireView().findViewById(R.id.plantLastUpdate);
 
             Bundle bundle = getArguments();
             if (bundle != null) {

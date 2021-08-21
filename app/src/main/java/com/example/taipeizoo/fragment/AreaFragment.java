@@ -23,7 +23,6 @@ import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static com.example.taipeizoo.fragment.MainFragment.plantList;
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
@@ -59,13 +58,13 @@ public class AreaFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         try {
-            ImageView areaImage = Objects.requireNonNull(getView()).findViewById(R.id.areaImage);
+            ImageView areaImage = requireView().findViewById(R.id.areaImage);
 
-            TextView areaName = Objects.requireNonNull(getView()).findViewById(R.id.areaName);
-            TextView areaMemo = Objects.requireNonNull(getView()).findViewById(R.id.areaMemo);
-            TextView areaCategory = Objects.requireNonNull(getView()).findViewById(R.id.areaCategory);
-            TextView areaInfo = Objects.requireNonNull(getView()).findViewById(R.id.areaInfo);
-            TextView areaPlant = Objects.requireNonNull(getView()).findViewById(R.id.areaPlant);
+            TextView areaName = requireView().findViewById(R.id.areaName);
+            TextView areaMemo = requireView().findViewById(R.id.areaMemo);
+            TextView areaCategory = requireView().findViewById(R.id.areaCategory);
+            TextView areaInfo = requireView().findViewById(R.id.areaInfo);
+            TextView areaPlant = requireView().findViewById(R.id.areaPlant);
 
             Bundle bundle = getArguments();
             if (bundle != null) {

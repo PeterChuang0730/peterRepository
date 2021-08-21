@@ -32,7 +32,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
@@ -78,12 +77,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         adapter = new AreaRecyclerAdapter(mActivity, this);
         adapter.setHasStableIds(true);
 
-        RecyclerView recyclerView = Objects.requireNonNull(getView()).findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = requireView().findViewById(R.id.recyclerView);
         // 設定LayoutManager為LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerView.setAdapter(adapter);
 
-        swipeRefreshLayout = Objects.requireNonNull(getView()).findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = requireView().findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setRefreshing(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
