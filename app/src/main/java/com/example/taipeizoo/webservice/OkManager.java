@@ -18,10 +18,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OkManager {
-    private OkHttpClient client;
+    private final OkHttpClient client;
     private volatile static OkManager manager;
     private static OkManager instance = null;
-    private Handler handler;
+    private final Handler handler;
 
     public static String API_ALL_AREA = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5a0e5fbb-72f8-41c6-908e-2fb25eff9b8a";
     public static String API_ALL_PLANT = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=f18de02f-b6c9-47c0-8cda-50efad621c14";
@@ -55,15 +55,12 @@ public class OkManager {
     }
 
     private void onSuccessJsonStringMethod(final String jsonValue, final CallbackResponse callBack) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (callBack != null) {
-                    try {
-                        callBack.onResponse(jsonValue);
-                    } catch (Exception ignored) {
+        handler.post(() -> {
+            if (callBack != null) {
+                try {
+                    callBack.onResponse(jsonValue);
+                } catch (Exception ignored) {
 
-                    }
                 }
             }
         });
@@ -75,16 +72,13 @@ public class OkManager {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (callback != null) {
-                            try {
-                                WaitProgressDialog.closeDialog();
-                                WaitProgressDialog.noNetwork();
-                            } catch (Exception ignored) {
+                handler.post(() -> {
+                    if (callback != null) {
+                        try {
+                            WaitProgressDialog.closeDialog();
+                            WaitProgressDialog.noNetwork();
+                        } catch (Exception ignored) {
 
-                            }
                         }
                     }
                 });

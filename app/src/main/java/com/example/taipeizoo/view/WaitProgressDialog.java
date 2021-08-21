@@ -3,7 +3,6 @@ package com.example.taipeizoo.view;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
 import com.example.taipeizoo.R;
 
@@ -56,9 +55,7 @@ public class WaitProgressDialog {
                     builder.setMessage(contextRef.get().getString(R.string.reconnect_network_hint))
                             .setCancelable(false)
                             .setPositiveButton(contextRef.get().getString(R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                        }
+                                    (dialog, id) -> {
                                     });
                     AlertDialog alert = builder.create();
                     alert.show();

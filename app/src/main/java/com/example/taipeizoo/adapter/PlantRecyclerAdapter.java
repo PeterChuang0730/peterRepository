@@ -22,9 +22,9 @@ import static com.example.taipeizoo.Utility.Util.isHttpOrHttpsUrl;
 
 public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdapter.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private ArrayList<Plant> plantList;
-    private AdapterView.OnItemClickListener onItemClickListener;
+    private final AdapterView.OnItemClickListener onItemClickListener;
 
     public PlantRecyclerAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener) {
         this.mContext = context;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class AreaInfoController {
     private ArrayList<Area> model;
-    private MainFragment view;
+    private final MainFragment view;
 
     public AreaInfoController(MainFragment view) {
         this.view = view;
