@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,9 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
 import com.example.taipeizoo.controller.AreaInfoController;
-import com.example.taipeizoo.databinding.FragmentMainBinding;
 import com.example.taipeizoo.model.Area;
-import com.example.taipeizoo.mvvm.MainViewModel;
 import com.example.taipeizoo.observer.UserDataRepository;
 import com.example.taipeizoo.view.WaitProgressDialog;
 
@@ -46,9 +43,6 @@ public class MainFragment extends Fragment
     private AreaInfoController controller;
 
     private Observable mUserDataRepositoryObservable;
-
-    private FragmentMainBinding binding;
-    private MainViewModel viewModel = new MainViewModel();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -83,10 +77,6 @@ public class MainFragment extends Fragment
             controller.setData(areaList);
         }
 
-        if (getActivity() != null) {
-            binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_main);
-        }
-
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -113,8 +103,6 @@ public class MainFragment extends Fragment
             swipeRefreshLayout.setRefreshing(false);
             UserDataRepository.getInstance().asyncGetPlantJsonData();
         });
-
-        viewModel.refresh();
 
         if (controller.getData() != null) {
             adapter.refreshData(controller);
