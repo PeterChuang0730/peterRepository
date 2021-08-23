@@ -3,7 +3,6 @@ package com.example.taipeizoo.observer;
 import android.text.TextUtils;
 
 import com.example.taipeizoo.model.Area;
-import com.example.taipeizoo.view.WaitProgressDialog;
 import com.example.taipeizoo.webservice.OkManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -70,8 +69,6 @@ public class UserDataRepository implements Subject {
     private void getAreaJsonData() {
         if (manager != null) {
             manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, result -> {
-                WaitProgressDialog.closeDialog();
-
                 if (!TextUtils.equals(result, "")) {
                     Gson gson = new Gson();
                     JsonObject jo = gson.fromJson(result, JsonObject.class);

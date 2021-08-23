@@ -176,10 +176,11 @@ public class MainFragment extends Fragment
 
     @Override
     public void onAreaListDataChanged(ArrayList<Area> areaList) {
+        WaitProgressDialog.closeDialog();
+
         if (areaList != null) {
             controller.setData(areaList);
             controller.updateView();
         }
-        refreshRecyclerView();
     }
 }
