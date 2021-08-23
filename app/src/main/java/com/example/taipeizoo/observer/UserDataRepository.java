@@ -3,6 +3,7 @@ package com.example.taipeizoo.observer;
 import android.text.TextUtils;
 
 import com.example.taipeizoo.model.Area;
+import com.example.taipeizoo.model.Plant;
 import com.example.taipeizoo.webservice.OkManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,6 +20,8 @@ import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
 public class UserDataRepository extends Observable {
     ArrayList<Area> areaList;
+    ArrayList<Plant> plantList;
+
     private static UserDataRepository INSTANCE = null;
 
     private UserDataRepository() {
@@ -68,5 +71,37 @@ public class UserDataRepository extends Observable {
                 }
             });
         }
+    }
+
+    public void asyncGetPlantJsonData() {
+        if (manager != null) {
+            manager.asyncJsonStringByURL(OkManager.API_ALL_PLANT, result -> {
+                if (!TextUtils.equals(result, "")) {
+                    Gson gson = new Gson();
+                    JsonObject jo = gson.fromJson(result, JsonObject.class);
+                    JsonObject jsonResult = jo.getAsJsonObject(RESULT);
+                    JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
+
+                    if (arrayResults != null) {
+                        Type collectionType = new TypeToken<List<Plant>>() {
+                        }.getType();
+
+                        ArrayList<Plant> plantList = gson.fromJson(arrayResults, collectionType);
+
+                        setPlantListData(plantList);
+                    }
+                }
+            });
+        }
+    }
+
+    public void setPlantListData(ArrayList<Plant> mDataList) {
+        plantList = mDataList;
+        setChanged();
+        notifyObservers();
+    }
+
+    public ArrayList<Plant> getPlantListData() {
+        return plantList;
     }
 }

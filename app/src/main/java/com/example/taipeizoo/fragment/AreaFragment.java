@@ -22,12 +22,12 @@ import com.bumptech.glide.Glide;
 import com.example.taipeizoo.R;
 import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
+import com.example.taipeizoo.observer.UserDataRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static com.example.taipeizoo.fragment.MainFragment.plantList;
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.PLANTLIST;
 
@@ -135,6 +135,7 @@ public class AreaFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        ArrayList<Plant> plantList = UserDataRepository.getInstance().getPlantListData();
         if (plantList != null) {
             selectedPlantList.clear();
             for (int i = 0; i < plantList.size(); i++) {
