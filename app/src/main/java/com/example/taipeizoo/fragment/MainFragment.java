@@ -22,6 +22,9 @@ import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
 import com.example.taipeizoo.controller.AreaInfoController;
 import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
+import com.example.taipeizoo.observer.RepositoryObserver;
+import com.example.taipeizoo.observer.Subject;
+import com.example.taipeizoo.observer.UserDataRepository;
 import com.example.taipeizoo.view.WaitProgressDialog;
 import com.example.taipeizoo.webservice.OkManager;
 import com.google.gson.Gson;
@@ -39,7 +42,8 @@ import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
-public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MainFragment extends Fragment
+        implements AdapterView.OnItemClickListener, RepositoryObserver {
     static ArrayList<Plant> plantList;
 
     private AreaRecyclerAdapter adapter;
@@ -51,11 +55,28 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private AreaInfoController controller;
 
+    private Subject mUserDataRepository;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         mActivity = (Activity) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mUserDataRepository = UserDataRepository.getInstance();
+        mUserDataRepository.registerObserver(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mUserDataRepository.removeObserver(this);
     }
 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +110,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             swipeRefreshLayout.setRefreshing(false);
-            getAreaJsonData();
             getPlantJsonData();
         });
 
@@ -97,34 +117,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             adapter.refreshData(controller);
         } else {
             WaitProgressDialog.showProgressDialog(mActivity, getString(R.string.loading_data));
-            getAreaJsonData();
-        }
-    }
-
-
-    private void getAreaJsonData() {
-        if (manager != null) {
-            manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, result -> {
-                WaitProgressDialog.closeDialog();
-
-                if (!TextUtils.equals(result, "")) {
-                    Gson gson = new Gson();
-                    JsonObject jo = gson.fromJson(result, JsonObject.class);
-                    JsonObject jsonResult = jo.getAsJsonObject(RESULT);
-                    JsonArray arrayResults = jsonResult.getAsJsonArray(RESULTS);
-
-                    if (arrayResults != null) {
-                        Type collectionType = new TypeToken<List<Area>>() {
-                        }.getType();
-                        ArrayList<Area> areaList = gson.fromJson(arrayResults, collectionType);
-
-                        if (areaList != null) {
-                            controller.setData(areaList);
-                            controller.updateView();
-                        }
-                    }
-                }
-            });
         }
     }
 
@@ -180,5 +172,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         if (controller.getData() != null) {
             adapter.refreshData(controller);
         }
+    }
+
+    @Override
+    public void onAreaListDataChanged(ArrayList<Area> areaList) {
+        if (areaList != null) {
+            controller.setData(areaList);
+            controller.updateView();
+        }
+        refreshRecyclerView();
     }
 }
