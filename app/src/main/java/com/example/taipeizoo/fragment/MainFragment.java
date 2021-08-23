@@ -22,8 +22,6 @@ import com.example.taipeizoo.adapter.AreaRecyclerAdapter;
 import com.example.taipeizoo.controller.AreaInfoController;
 import com.example.taipeizoo.model.Area;
 import com.example.taipeizoo.model.Plant;
-import com.example.taipeizoo.observer.RepositoryObserver;
-import com.example.taipeizoo.observer.Subject;
 import com.example.taipeizoo.observer.UserDataRepository;
 import com.example.taipeizoo.view.WaitProgressDialog;
 import com.example.taipeizoo.webservice.OkManager;
@@ -37,13 +35,16 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import static com.example.taipeizoo.webservice.OkManager.AREADATA;
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
 public class MainFragment extends Fragment
-        implements AdapterView.OnItemClickListener, RepositoryObserver {
+        implements AdapterView.OnItemClickListener, Observer {
+    private ArrayList<Area> areaList;
     static ArrayList<Plant> plantList;
 
     private AreaRecyclerAdapter adapter;
@@ -55,7 +56,7 @@ public class MainFragment extends Fragment
 
     private AreaInfoController controller;
 
-    private Subject mUserDataRepository;
+    private Observable mUserDataRepositoryObservable;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -68,15 +69,16 @@ public class MainFragment extends Fragment
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mUserDataRepository = UserDataRepository.getInstance();
-        mUserDataRepository.registerObserver(this);
+        mUserDataRepositoryObservable = UserDataRepository.getInstance();
+        areaList = UserDataRepository.getInstance().getAreaListData();
+        mUserDataRepositoryObservable.addObserver(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        mUserDataRepository.removeObserver(this);
+        mUserDataRepositoryObservable.deleteObserver(this);
     }
 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +86,10 @@ public class MainFragment extends Fragment
 
         if (controller == null) {
             controller = new AreaInfoController(MainFragment.this);
+        }
+
+        if (areaList != null) {
+            controller.setData(areaList);
         }
 
         return inflater.inflate(R.layout.fragment_main, container, false);
@@ -175,12 +181,17 @@ public class MainFragment extends Fragment
     }
 
     @Override
-    public void onAreaListDataChanged(ArrayList<Area> areaList) {
+    public void update(Observable o, Object arg) {
         WaitProgressDialog.closeDialog();
 
-        if (areaList != null) {
-            controller.setData(areaList);
-            controller.updateView();
+        if (o instanceof UserDataRepository) {
+            UserDataRepository userDataRepository = (UserDataRepository) o;
+
+            if (userDataRepository.getAreaListData() != null) {
+                controller.setData(userDataRepository.getAreaListData());
+                controller.updateView();
+            }
+
         }
     }
 }

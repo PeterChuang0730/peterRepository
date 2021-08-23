@@ -12,18 +12,16 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import static com.example.taipeizoo.webservice.OkManager.RESULT;
 import static com.example.taipeizoo.webservice.OkManager.RESULTS;
 
-public class UserDataRepository implements Subject {
+public class UserDataRepository extends Observable {
     ArrayList<Area> areaList;
     private static UserDataRepository INSTANCE = null;
 
-    private final ArrayList<RepositoryObserver> mObservers;
-
     private UserDataRepository() {
-        mObservers = new ArrayList<>();
         getNewDataFromRemote();
     }
 
@@ -31,8 +29,7 @@ public class UserDataRepository implements Subject {
 
     private void getNewDataFromRemote() {
         manager = OkManager.getInstance();
-        getAreaJsonData();
-
+        asyncGetAreaJsonData();
     }
 
     public static UserDataRepository getInstance() {
@@ -42,31 +39,17 @@ public class UserDataRepository implements Subject {
         return INSTANCE;
     }
 
-    @Override
-    public void registerObserver(RepositoryObserver repositoryObserver) {
-        if (!mObservers.contains(repositoryObserver)) {
-            mObservers.add(repositoryObserver);
-        }
-    }
-
-    @Override
-    public void removeObserver(RepositoryObserver repositoryObserver) {
-        mObservers.remove(repositoryObserver);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (RepositoryObserver observer : mObservers) {
-            observer.onAreaListDataChanged(areaList);
-        }
-    }
-
     public void setAreaListData(ArrayList<Area> mDataList) {
         areaList = mDataList;
+        setChanged();
         notifyObservers();
     }
 
-    private void getAreaJsonData() {
+    public ArrayList<Area> getAreaListData() {
+        return areaList;
+    }
+
+    private void asyncGetAreaJsonData() {
         if (manager != null) {
             manager.asyncJsonStringByURL(OkManager.API_ALL_AREA, result -> {
                 if (!TextUtils.equals(result, "")) {
